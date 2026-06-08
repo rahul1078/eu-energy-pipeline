@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: mart_energy_prices
+    description: >
+      Annual electricity price summary by country and consumer type.
+      Aggregated from stg_electricity_prices (TOT_KWH band only) by averaging
+      the two semi-annual periods (S1 and S2) into a single annual figure.
+      Includes year-over-year change and a derived price tier mode.
+    columns:
+      - name: country_code
+        description: "ISO alpha-2 country code (DE, FR, NL, ES, PL, IT)."
+        data_tests:
+          - not_null
+
+      - name: year
+        description: "Calendar year (integer), extracted from the Eurostat period label."
+        data_tests:
+          - not_null
+
+      - name: country_name
+        description: "Full country name corresponding to country_code."
+        data_tests:
+          - not_null
+
+      - name: consumer_type
+        description: "Consumer segment: 'household' or 'industry'."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['household', 'industry']
+
+      - name: avg_price_eur_per_kwh
+        description: "Annual average electricity price in EUR/kWh (mean of S1 and S2)."
+        data_tests:
+          - not_null
+
+      - name: min_price
+        description: "Lower of the two semi-annual prices (EUR/kWh) for this year."
+
+      - name: max_price
+        description: "Higher of the two semi-annual prices (EUR/kWh) for this year."
+
+      - name: price_category_mode
+        description: >
+          Most common price tier across the semi-annual periods in the year.
+          High = >0.25 EUR/kWh, Medium = 0.15–0.25, Low = <0.15.
+          Ties (one period High, one Medium) are broken in favour of the higher tier.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['High', 'Medium', 'Low']
+
+      - name: prior_year_avg_price
+        description: >
+          Previous year's avg_price_eur_per_kwh for the same country and consumer type.
+          NULL for the earliest year in the dataset or where prior-year data is absent.
+
+      - name: yoy_change_pct
+        description: >
+          Year-over-year percentage change in average price.
+          Formula: (current - prior) / prior * 100, rounded to 2 decimal places.
+          NULL when prior_year_avg_price is unavailable.

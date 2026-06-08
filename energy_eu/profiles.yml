@@ -1,0 +1,6 @@
+energy_eu:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /Users/rahulaswani/eu-energy-pipeline/data/energy.duckdb

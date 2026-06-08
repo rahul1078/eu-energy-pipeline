@@ -1,0 +1,90 @@
+version: 2
+
+# ---------------------------------------------------------------------------
+# Source: raw table loaded by ingestion/scripts/load_to_duckdb.py
+# ---------------------------------------------------------------------------
+
+sources:
+  - name: raw
+    description: "Raw electricity price data ingested from the Eurostat REST API."
+    database: energy   # DuckDB catalog — derived from the .duckdb filename
+    schema: main
+    tables:
+      - name: raw_electricity_prices
+        description: >
+          Bi-annual electricity prices for household and industrial consumers
+          across six EU countries (DE, FR, NL, ES, PL, IT), covering 2015–2024.
+          Loaded verbatim from data/raw/eurostat_electricity_prices.csv.
+        columns:
+          - name: consumer_type
+            description: "Either 'household' or 'industry'."
+          - name: geo
+            description: "ISO alpha-2 country code."
+          - name: time
+            description: "Bi-annual period code (e.g. '2020-S1')."
+          - name: value_eur_per_kwh
+            description: "Electricity price in the unit and currency indicated by the row."
+          - name: tax
+            description: "Tax inclusion code: I_TAX, X_TAX, or X_VAT."
+          - name: currency
+            description: "Currency code: EUR, NAC, or PPS."
+          - name: loaded_at
+            description: "UTC timestamp when this row was loaded into DuckDB."
+
+# ---------------------------------------------------------------------------
+# Staging model
+# ---------------------------------------------------------------------------
+
+models:
+  - name: stg_electricity_prices
+    description: >
+      Cleaned and filtered electricity prices from Eurostat.
+      Scoped to EUR prices with all taxes and levies included (I_TAX),
+      with key columns renamed and a derived price_category tier added.
+    columns:
+      - name: country_code
+        description: "ISO alpha-2 country code (DE, FR, NL, ES, PL, IT)."
+        data_tests:
+          - not_null
+
+      - name: period
+        description: "Bi-annual period label (e.g. '2020-S1', '2020-S2')."
+        data_tests:
+          - not_null
+
+      - name: consumer_type
+        description: "Consumer segment: 'household' or 'industry'."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['household', 'industry']
+
+      - name: price_eur_per_kwh
+        description: "Electricity price in EUR per kWh, cast to DECIMAL(10,4)."
+        data_tests:
+          - not_null
+
+      - name: price_category
+        description: >
+          Derived price tier.
+          High   = price > 0.25 EUR/kWh
+          Medium = price between 0.15 and 0.25 EUR/kWh (inclusive)
+          Low    = price < 0.15 EUR/kWh
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['High', 'Medium', 'Low']
+
+      - name: nrg_cons
+        description: "Eurostat consumption band code (e.g. TOT_KWH, KWH1000-2499)."
+
+      - name: nrg_cons_label
+        description: "Human-readable label for the consumption band."
+
+      - name: tax_label
+        description: "Human-readable tax description (constant: 'All taxes and levies included')."
+
+      - name: loaded_at
+        description: "UTC timestamp carried forward from the raw table."

@@ -1,0 +1,30 @@
+[0m18:38:35.339064 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x111e89940>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1138bf750>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1138bfb10>]}
+
+
+============================== 18:38:35.341418 | 6d54332e-88c1-46cf-b655-53dd1338f54e ==============================
+[0m18:38:35.341418 [info ] [MainThread]: Running with dbt=1.11.11
+[0m18:38:35.341664 [debug] [MainThread]: running dbt with arguments {'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'cache_selected_only': 'False', 'log_cache_events': 'False', 'log_format': 'default', 'use_experimental_parser': 'False', 'invocation_command': 'dbt init energy_eu --profiles-dir .', 'debug': 'False', 'use_colors': 'True', 'send_anonymous_usage_stats': 'True', 'warn_error': 'None', 'version_check': 'True', 'empty': 'None', 'static_parser': 'True', 'indirect_selection': 'eager', 'profiles_dir': '.', 'log_path': 'logs', 'write_json': 'True', 'partial_parse': 'True', 'fail_fast': 'False', 'introspect': 'True', 'no_print': 'None', 'printer_width': '80', 'quiet': 'False'}
+[0m18:38:35.350608 [debug] [MainThread]: Starter project path: /Applications/anaconda3/lib/python3.13/site-packages/dbt/include/starter_project
+[0m18:38:35.354241 [info ] [MainThread]: 
+Your new dbt project "energy_eu" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m18:38:35.354406 [info ] [MainThread]: Setting up your profile.
+[0m18:38:43.699381 [info ] [MainThread]: Profile energy_eu written to profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m18:38:43.715235 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 8.408819, "process_in_blocks": "0", "process_kernel_time": 0.151744, "process_mem_max_rss": "138346496", "process_out_blocks": "0", "process_user_time": 0.523775}
+[0m18:38:43.715498 [debug] [MainThread]: Command `dbt init` succeeded at 18:38:43.715452 after 8.41 seconds
+[0m18:38:43.715642 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1138fd0f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x112a70950>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x113991370>]}
+[0m18:38:43.715785 [debug] [MainThread]: Flushing usage events
+[0m18:38:45.259335 [debug] [MainThread]: An error was encountered while trying to flush usage events
