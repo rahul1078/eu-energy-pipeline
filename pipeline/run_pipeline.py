@@ -110,6 +110,11 @@ def build_steps() -> list[StepDef]:
             cmd=[dbt, "test", "--profiles-dir", "."],
             cwd=ENERGY_EU_DIR,
         ),
+        StepDef(
+            name="Load to PostgreSQL",
+            cmd=[sys.executable, os.path.join(ingestion, "load_to_postgres.py")],
+            cwd=PROJECT_ROOT,
+        ),
     ]
 
 
