@@ -115,6 +115,11 @@ def build_steps() -> list[StepDef]:
             cmd=[sys.executable, os.path.join(ingestion, "load_to_postgres.py")],
             cwd=PROJECT_ROOT,
         ),
+        StepDef(
+            name="Data quality report",
+            cmd=[sys.executable, os.path.join(_SCRIPT_DIR, "data_quality_report.py")],
+            cwd=PROJECT_ROOT,
+        ),
     ]
 
 
